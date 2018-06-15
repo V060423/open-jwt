@@ -1,0 +1,25 @@
+server:
+  port: 6666
+spring:
+  application:
+    name: my-jwt
+  datasource:
+    url: jdbc:mysql://localhost:3306/jwt?characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+auth:
+  active: 1800
+  refresh: 259200
+  secret: 4DCD56931324E86FBF51BA2EAC9468BC
+  header: Access-Token
+  tokenHead: "Bearer "

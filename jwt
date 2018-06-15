@@ -1,0 +1,108 @@
+JWT-Json Web Token
+
+简介:JWT是一种用于双方之间传递安全信息的简洁的、URL安全的表述性声明规范.
+
+
+JWT主要的使用场景
+
+用于身份认证  SSO单点登录：用户第一次完成登录，生成jwt,在接下来的每个请求都包含jwt,在服务器端进行身份的认证
+
+信息交换   在通信的双方之间使用JWT对数据进行编码是一种非常安全的方式，由于它的信息是经过签名的，可以确保发送者发送的信息是没有经过伪造的。
+
+
+JWT的结构（总共包含3部分）
+
+1.Header 头部
+{
+  "alg":"HS256" --加密算法
+ "type":"jwt"   --token类型
+}
+
+
+2.Payload 负载（需要Base64Url进行编码）
+
+Payload包含了claim， Claim是一些实体（通常指的用户）的状态和额外的元数据，
+
+
+ 有三种类型的claim：
+
+ 1.reserved
+ 2. public
+ 3.private
+
+
+Reserved claims:
+
+ 这些claim是JWT预先定义的，在JWT中并不会强制使用它们，而是推荐使用，常用的有 iss（签发者） , exp（过期时间戳） , sub（面向的用户） , aud（接收方） , iat（签发时间） 。
+
+Public claims：
+
+根据需要定义自己的字段，注意应该避免冲突
+
+Private claims：
+
+这些是自定义的字段，可以用来在双方之间交换信息
+
+{
+  "sub": "1234567890", --面向的用户
+  "name": "John Doe",
+  "admin": true
+}
+
+
+3.Signature 签名
+
+使用Base64Url后的Header、Payload以及秘钥，通过指定的加密算法进行签名
+
+
+JWT认证过程
+
+1. 第一次用户通过userName和password登录系统
+
+2.服务器进行登录验证，如果验证成功，创建一个jwt token给该用户
+
+
+3.返回给用户一个JWT,保存在本地（localStorage或者cookie）
+
+4.用户请求资源， 请求的header中加入Authorization: Bearer xxxx(token)
+
+5.服务端的保护路由会检查请求头Authorization 中的JWT，
+
+JWT验证（验证正确的JWT格式、检查signature、检查claims、检查权限）
+
+如果合法，则允许用户的行为，由于JWT这样的自包含信息，减少了数据库的查询操作
+
+6.客户端接收响应
+
+
+JWT认证所需要的包
+
+   <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.6.0</version>
+    </dependency>
+
+Spring security 集成JWT
+
+
+1.创建AuthorityProperties配置文件加载类,外置化一些属性
+
+2.创建AuthorityExecutor 提供生成token、解析token的方法
+
+3.创建AuthorityConfigure初始化数据
+
+4.创建JwtUserDetails 继承UserDetails
+
+5.创建JwtUserDetailsFactory工厂
+
+6.创建JwtUserDetailsServiceImpl 重写loadUserByUsername(String userName) 方法,查询当前的用户是否存在
+
+7.创建WebSecurityConfig安全配置类
+
+8.创建JwtAuthenticationTokenFilter拦截用户请求，并在WebSecurityConfig安全配置类中配置
+
+
+
+
+
