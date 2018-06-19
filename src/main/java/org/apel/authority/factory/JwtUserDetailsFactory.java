@@ -6,6 +6,7 @@ import org.apel.authority.model.SystemUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public  final  class JwtUserDetailsFactory {
                 user.getUserName(),
                 user.getPassword(),
                 user.getEmail(),
-                mapToGrantedAuthorities(user.getRoles()),
+                mapToGrantedAuthorities(Arrays.asList(user.getRoles())),
                 user.getLastPasswordResetDate()
         );
 

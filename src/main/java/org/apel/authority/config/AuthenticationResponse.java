@@ -1,5 +1,7 @@
 package org.apel.authority.config;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -7,11 +9,12 @@ import java.io.Serializable;
  * @Description  JWT响应对象
  * @Date 2018/6/15 16:04
  */
+@Data
 public class AuthenticationResponse  implements Serializable {
 
-    private final String token;
+    private  String token;
 
-    private String refresh;
+    private Long refresh;
 
     private Object subject;
 
@@ -19,22 +22,9 @@ public class AuthenticationResponse  implements Serializable {
         this.token = token;
     }
 
-    public AuthenticationResponse(String token, String refresh, Object subject) {
+    public AuthenticationResponse(String token, Long refresh, Object subject) {
         this.token = token;
         this.refresh =refresh;
         this.subject =subject;
     }
-
-    public String getToken() {
-        return this.token;
-    }
-
-    public String getRefresh() {
-        return refresh;
-    }
-
-    public Object getSubject() {
-        return subject;
-    }
-
 }

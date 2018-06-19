@@ -25,15 +25,25 @@ public class AuthController {
     @Autowired
     private AuthenticationProperties authenticationProperties;
 
-    @PostMapping("/gain")
+    /**
+     * 用户登录
+     * @param authenticationRequest
+     * @return
+     */
+    @PostMapping("/auth/gain")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken( @RequestBody AuthenticationRequest authenticationRequest){
 
         final String token = authService.login(authenticationRequest.getUserName(), authenticationRequest.getPassword());
 
         // Return the token
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        return ResponseEntity.ok(new AuthenticationResponse(token,authenticationProperties.getRefresh(),authenticationRequest.getUserName()));
     }
 
+    /**
+     * 刷新token
+     * @param request
+     * @return
+     */
     @GetMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(authenticationProperties.getTokenHead());
@@ -45,8 +55,13 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/register")
-    public SystemUser register(@RequestBody SystemUser addedUser){
-        return authService.add(addedUser);
+    /**
+     * 注册用户
+     * @param user
+     * @return
+     */
+    @PostMapping("/auth/register")
+    public SystemUser register(@RequestBody SystemUser user){
+        return authService.add(user);
     }
 }

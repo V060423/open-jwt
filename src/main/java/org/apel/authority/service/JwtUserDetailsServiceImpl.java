@@ -4,7 +4,6 @@ import org.apel.authority.factory.JwtUserDetailsFactory;
 import org.apel.authority.model.SystemUser;
 import org.apel.authority.repository.SystemUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

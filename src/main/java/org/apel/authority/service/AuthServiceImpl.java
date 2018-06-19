@@ -15,9 +15,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author wangbowen
@@ -62,11 +63,13 @@ public class AuthServiceImpl implements  AuthService {
 
             String password = encoder.encode(user.getPassword());
 
+            String id = UUID.randomUUID().toString().replaceAll("-","");
+
+            user.setId(id);
+
             user.setPassword(password);
 
             user.setLastPasswordResetDate(new Date());
-
-            user.setRoles(Arrays.asList("ROLE_USER"));
 
             return systemUserRepository.save(user);
         }

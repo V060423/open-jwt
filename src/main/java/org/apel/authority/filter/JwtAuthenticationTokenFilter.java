@@ -38,14 +38,16 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
+        String header = authorityProperties.getHeader();
+
         //获取请求的头部信息
-        String  authHeader = request.getHeader(authorityProperties.getHeader());
+        String  authHeader = request.getHeader(header);
 
-        if(Objects.isNull(authHeader)){
-
-            throw  new  RuntimeException("access without json web token");
-
-        }
+//        if(Objects.isNull(authHeader)){
+//
+//            throw  new  RuntimeException("access without json web token");
+//
+//        }
 
         if(Objects.nonNull(authHeader) && authHeader.startsWith(authorityProperties.getTokenHead())){
 

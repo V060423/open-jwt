@@ -24,33 +24,58 @@ public class UserController {
     @Autowired
     private SystemUserRepository repository;
 
+    /**
+     * 获取全部用户
+     * @return
+     */
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping("/all")
     public List<SystemUser> getUsers() {
         return (List<SystemUser>) repository.findAll();
     }
 
+    /**
+     * 新增用户
+     * @param addedUser
+     * @return
+     */
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping("/add")
     SystemUser addUser(@RequestBody SystemUser addedUser) {
         return repository.save(addedUser);
     }
 
+    /**
+     * 根据id查询用户
+     * @param id
+     * @return
+     */
     @PostAuthorize("returnObject.username == principal.username or hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping("/find/{id}")
     public SystemUser getUser(@PathVariable String id) {
         return repository.findById(id).get();
     }
 
+    /**
+     * 更新用户
+     * @param id
+     * @param updatedUser
+     * @return
+     */
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PatchMapping("/modify/{id}")
     public  SystemUser updateUser(@PathVariable String id, @RequestBody SystemUser updatedUser) {
         updatedUser.setId(id);
         return repository.save(updatedUser);
     }
 
+    /**
+     * 根据用户id删除用户
+     * @param id
+     * @return
+     */
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/delete/{id}")
     public SystemUser removeUser(@PathVariable String id) {
         Optional<SystemUser> user = repository.findById(id);
         if(Objects.nonNull(user)) {
@@ -59,8 +84,13 @@ public class UserController {
         return user.get();
     }
 
+    /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
     @PostAuthorize("returnObject.username == principal.username or hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @GetMapping("/find/username")
     public SystemUser getUserByUsername(@RequestParam(value="username") String username) {
         return repository.findByUserName(username);
     }
